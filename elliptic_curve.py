@@ -451,6 +451,16 @@ def divine_decrypt(C1, C2, private_key):
 
 
 if __name__ == "__main__":
+    # ==============================================================================
+    # EDUCATIONAL DEMONSTRATION ONLY
+    # ==============================================================================
+    # This demonstration script displays cryptographic secrets (private keys,
+    # decrypted messages) for educational purposes. In production systems:
+    # - Private keys should NEVER be logged, displayed, or transmitted in clear text
+    # - Use cryptographically secure random number generators (CSPRNG)
+    # - Follow established cryptographic standards and protocols
+    # ==============================================================================
+    
     print("=" * 70)
     print("ELLIPTIC CURVE CRYPTOGRAPHY IN THE DIVINE REALM")
     print("=" * 70)
@@ -477,6 +487,8 @@ if __name__ == "__main__":
     # Generate keypair
     print("Generating cryptographic keys using divine proportions...")
     private_key, public_key = generate_divine_keypair(curve, generator)
+    # NOTE: Displaying private keys is for demonstration purposes only.
+    # In production systems, private keys should NEVER be logged or displayed.
     print(f"Private Key: {private_key}")
     print(f"Public Key: {public_key}")
     print()
