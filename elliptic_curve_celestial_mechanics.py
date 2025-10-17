@@ -9,7 +9,7 @@ including:
 """
 
 import numpy as np
-from typing import Tuple, Optional
+from typing import Tuple
 import matplotlib.pyplot as plt
 
 
@@ -117,7 +117,8 @@ class EllipticOrbit:
         Returns:
             Eccentric anomaly E
         """
-        # Initial guess
+        # Initial guess: For low eccentricity, M is a good approximation of E.
+        # For high eccentricity (e >= 0.8), π provides better convergence.
         E = mean_anomaly if self.e < 0.8 else np.pi
         
         # Newton-Raphson iteration
