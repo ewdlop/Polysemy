@@ -10,21 +10,46 @@ This repository includes an implementation of mathematical concepts featured in 
 - **Golden Ratio (Phi)**: The divine proportion (≈ 1.618033988749895) that emerges from the Fibonacci sequence
 - **Cryptographic Validation**: Tools to verify Fibonacci patterns
 
+## Elliptic Curve Cryptography in the Divine Realm
+
+Building upon the divine proportions of the Golden Ratio, this repository now includes a complete implementation of **Elliptic Curve Cryptography** (ECC):
+
+- **Divine Curve**: An elliptic curve with parameters inspired by Phi (the Golden Ratio)
+- **Point Operations**: Complete implementation of elliptic curve group operations (addition, doubling, scalar multiplication)
+- **Key Generation**: Cryptographic key pairs derived from Fibonacci sequences and the Golden Ratio
+- **Encryption/Decryption**: ElGamal-style encryption scheme on elliptic curves
+- **Mathematical Rigor**: Includes Tonelli-Shanks algorithm for modular square roots
+
 ### Usage
 
-Run the demonstration:
+Run the Fibonacci/Golden Ratio demonstration:
 ```bash
 python3 da_vinci_code.py
 ```
 
-Run the tests:
+Run the Elliptic Curve Cryptography demonstration:
+```bash
+python3 elliptic_curve.py
+```
+
+Run all tests:
 ```bash
 python3 test_da_vinci_code.py
+python3 test_elliptic_curve.py
 ```
 
 ### Features
 
+**Classical Mathematics (Da Vinci Code):**
 - Generate Fibonacci sequences of any length
 - Calculate the Golden Ratio using Fibonacci ratios
 - Validate whether a sequence follows the Fibonacci pattern
 - Demonstrate the mathematical beauty featured in "The Da Vinci Code"
+
+**Modern Cryptography (Elliptic Curves):**
+- Create elliptic curves over finite fields
+- Perform point addition and scalar multiplication
+- Generate public/private key pairs using divine proportions
+- Encrypt and decrypt messages using elliptic curve cryptography
+- Verify cryptographic properties (associativity, commutativity)
+- Bridge ancient mathematical beauty with modern security
