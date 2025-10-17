@@ -141,7 +141,10 @@ class EllipticCurvePoint:
         g, x, _ = self._extended_gcd(a, m)
         
         if g != 1:
-            raise ValueError(f"Modular inverse does not exist for {a} mod {m}")
+            raise ValueError(
+                f"Modular inverse does not exist for {a} mod {m}. "
+                f"This occurs when {a} and {m} are not coprime (gcd = {g})"
+            )
         
         return x % m
     
@@ -218,6 +221,10 @@ class EllipticCurve:
         return f"EllipticCurve(y² = x³ + {self.a}x + {self.b} mod {self.p})"
 
 
+# Divine constants derived from the Golden Ratio
+DIVINE_PRIME = 163  # A small prime for demonstration, close to Phi * 100
+
+
 def divine_curve():
     """
     Create the "Divine Curve" inspired by the Golden Ratio.
@@ -225,23 +232,25 @@ def divine_curve():
     This curve uses parameters derived from the Golden Ratio (Phi),
     connecting ancient mathematical beauty with modern cryptography.
     
+    The divine prime (163) is chosen for its special properties:
+    - It's close to 100 * Phi (approximately 161.8)
+    - It's a prime number suitable for finite field arithmetic
+    - It's small enough for educational/demonstration purposes
+    
     Returns:
         EllipticCurve: A curve with divine proportions
     """
     # Calculate Phi with high precision
     phi = da_vinci_code.golden_ratio(100)
     
-    # Use a prime number close to Phi * 100
-    p = 163  # A small prime for demonstration
-    
     # Derive curve parameters from Phi
     # a = floor(Phi) = 1
     a = int(phi)
     
     # b = floor(Phi * 10) mod p
-    b = int(phi * 10) % p
+    b = int(phi * 10) % DIVINE_PRIME
     
-    return EllipticCurve(a, b, p)
+    return EllipticCurve(a, b, DIVINE_PRIME)
 
 
 def generate_divine_keypair(curve=None, generator=None, private_key_seed=None):
@@ -250,6 +259,11 @@ def generate_divine_keypair(curve=None, generator=None, private_key_seed=None):
     
     The private key is derived from the Fibonacci sequence and Golden Ratio,
     while the public key is computed via elliptic curve scalar multiplication.
+    
+    Note: This implementation uses predictable sources (Fibonacci and Phi) for
+    educational and demonstration purposes. In production cryptographic systems,
+    private keys should be generated using cryptographically secure random
+    number generators (CSPRNG).
     
     Args:
         curve: The elliptic curve to use (default: divine_curve())
@@ -374,6 +388,12 @@ def divine_encrypt(message, public_key, generator):
     
     This implements a simplified ElGamal-style encryption on elliptic curves.
     
+    Note: This implementation uses predictable ephemeral keys (from Fibonacci
+    and Phi) for demonstration purposes. In production systems, ephemeral keys
+    should be generated using cryptographically secure random number generators
+    to ensure semantic security (same message encrypted twice produces different
+    ciphertexts).
+    
     Args:
         message: Integer message to encrypt (must be < curve.p)
         public_key: Recipient's public key (EllipticCurvePoint)
@@ -383,6 +403,7 @@ def divine_encrypt(message, public_key, generator):
         tuple: (C1, C2) where C1 and C2 are EllipticCurvePoints
     """
     # Generate ephemeral private key from Fibonacci
+    # WARNING: This is deterministic and for demonstration only!
     phi = da_vinci_code.golden_ratio(30)
     fib = da_vinci_code.fibonacci(8)
     k = int(sum(fib) * phi) % public_key.curve.p
