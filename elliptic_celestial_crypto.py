@@ -101,11 +101,21 @@ class EllipticCurve:
         if P == Q:
             # Point doubling (tangent line)
             # slope = (3x₁² + a) / (2y₁)
-            slope = (3 * x1**2 + self.a) * pow(2 * y1, -1, self.p)
+            # Handle case where 2y₁ ≡ 0 (mod p)
+            denominator = (2 * y1) % self.p
+            if denominator == 0:
+                return None  # Point at infinity
+            slope = (3 * x1**2 + self.a) * pow(denominator, -1, self.p)
         else:
             # Two distinct points (secant line)
             # slope = (y₂ - y₁) / (x₂ - x₁)
-            slope = (y2 - y1) * pow(x2 - x1, -1, self.p)
+            # Handle case where x₁ = x₂ (already handled above, but double-check)
+            denominator = (x2 - x1) % self.p
+            if denominator == 0:
+                # This means x1 = x2, so points are either equal or inverses
+                # Already handled above, but this is a safety check
+                return None  # Point at infinity
+            slope = (y2 - y1) * pow(denominator, -1, self.p)
         
         slope %= self.p
         
@@ -232,26 +242,32 @@ class OrbitalCryptoSystem:
         # Hash the message to get a fixed-size value
         h = int(hashlib.sha256(message.encode()).hexdigest(), 16) % self.N
         
-        # Generate a random k (like a random orbital phase)
-        k = secrets.randbelow(self.N - 1) + 1
+        # Retry loop to handle rare cases where r or s is zero
+        max_attempts = 100
+        for attempt in range(max_attempts):
+            # Generate a random k (like a random orbital phase)
+            k = secrets.randbelow(self.N - 1) + 1
+            
+            # Calculate point R = k * G
+            R = self.curve.scalar_multiplication(k, self.G)
+            if R is None:
+                continue  # Retry with a new k
+            
+            r = R[0] % self.N
+            if r == 0:
+                continue  # Retry with a new k
+            
+            # Calculate s = k^(-1) * (h + r * private_key) mod N
+            k_inv = pow(k, -1, self.N)
+            s = (k_inv * (h + r * private_key)) % self.N
+            
+            if s == 0:
+                continue  # Retry with a new k
+            
+            return (r, s)
         
-        # Calculate point R = k * G
-        R = self.curve.scalar_multiplication(k, self.G)
-        if R is None:
-            raise ValueError("Invalid signature generation")
-        
-        r = R[0] % self.N
-        if r == 0:
-            raise ValueError("Invalid signature (r is zero)")
-        
-        # Calculate s = k^(-1) * (h + r * private_key) mod N
-        k_inv = pow(k, -1, self.N)
-        s = (k_inv * (h + r * private_key)) % self.N
-        
-        if s == 0:
-            raise ValueError("Invalid signature (s is zero)")
-        
-        return (r, s)
+        # This should be extremely rare (probability ~1/N per attempt)
+        raise ValueError("Failed to generate valid signature after maximum attempts")
     
     def verify_signature(self, message: str, signature: Tuple[int, int], 
                         public_key: Tuple[int, int]) -> bool:
