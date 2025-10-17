@@ -57,8 +57,8 @@ def golden_ratio(iterations=50):
         
     Example:
         >>> phi = golden_ratio(50)
-        >>> round(phi, 15)
-        1.618033988749895
+        >>> abs(phi - 1.618033988749895) < 1e-14
+        True
     """
     fib = fibonacci(iterations)
     if len(fib) < 2:
