@@ -2,9 +2,39 @@
 
 改變過去是(心((虛)能))
 
+## Temporal Database - Future-Read (Tachyonic) and Past-Write (Quantum-Eraser)
+
+This repository includes a theoretical temporal database implementation that transcends linear time:
+
+- **Tachyonic Reads**: Read data from future timestamps (faster-than-light information access)
+- **Quantum-Eraser Writes**: Write data to past timestamps (retroactive modifications)
+- **Causality Tracking**: Maintain temporal consistency and causality chains
+- **Temporal Versioning**: Full history across all temporal coordinates
+
+### Usage
+
+Run the temporal database demonstration:
+```bash
+python3 temporal_database.py
+```
+
+Run the tests:
+```bash
+python3 test_temporal_database.py
+```
+
+### Features
+
+- Store and retrieve data across different temporal coordinates
+- Perform tachyonic operations to read from the future
+- Perform quantum-eraser operations to write to the past
+- Track causality chains and temporal consistency
+- Maintain version history across all time coordinates
+- Quantum state management (superposition, collapsed, erased)
+
 ## The Da Vinci Code
 
-This repository includes an implementation of mathematical concepts featured in Dan Brown's "The Da Vinci Code":
+This repository also includes an implementation of mathematical concepts featured in Dan Brown's "The Da Vinci Code":
 
 - **Fibonacci Sequence**: The famous sequence where each number is the sum of the two preceding ones (1, 1, 2, 3, 5, 8, 13, 21...)
 - **Golden Ratio (Phi)**: The divine proportion (≈ 1.618033988749895) that emerges from the Fibonacci sequence
