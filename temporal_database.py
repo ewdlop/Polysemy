@@ -81,9 +81,15 @@ class TemporalDatabase:
         if key not in self.temporal_store:
             self.temporal_store[key] = []
         
-        # Insert version in temporal order
-        self.temporal_store[key].append(version)
-        self.temporal_store[key].sort(key=lambda v: v.timestamp)
+        # Insert version in temporal order using binary search
+        versions = self.temporal_store[key]
+        insert_pos = 0
+        for i, v in enumerate(versions):
+            if v.timestamp <= timestamp:
+                insert_pos = i + 1
+            else:
+                break
+        versions.insert(insert_pos, version)
         
         return True
     
@@ -145,17 +151,14 @@ class TemporalDatabase:
         Args:
             key: Data identifier
             value: Data value to store
-            past_offset: How far into the past to write (negative or positive)
+            past_offset: Timedelta indicating how far into the past to write
+                        (positive values go further into the past)
             
         Returns:
             bool: Success status
         """
         # Calculate the past timestamp
-        if isinstance(past_offset, timedelta):
-            past_timestamp = self.reference_time - past_offset
-        else:
-            # If it's already a datetime, use it directly
-            past_timestamp = past_offset
+        past_timestamp = self.reference_time - past_offset
         
         # Record this quantum-eraser event
         self.quantum_eraser_events.append((past_timestamp, key))
